@@ -1,13 +1,17 @@
-import cron from "cron";
+import { CronJob } from "cron";
 import https from "https";
 
-const job=new confirm.CronJob("*14 * * * *",function(){
-    https
-    .get(process.env.API_URL,(res)=>{
-        if(res.statusCode===200) console.log("GET request sent successfully");
-        else console.log("GET request failed, res.statusCode");
-    })
-    .on("error",(e) => console.error("error while sending request",e));
+const job = new CronJob("14 * * * *", function () {
+  console.log("Cron job executed at minute 14");
+
+  // Example request to your backend or an API
+  https.get("https://your-api-url.com/trigger-task", (res) => {
+    console.log(`API responded with status code: ${res.statusCode}`);
+  }).on("error", (err) => {
+    console.error("Error calling API:", err.message);
+  });
 });
+
+job.start();
 
 export default job;
